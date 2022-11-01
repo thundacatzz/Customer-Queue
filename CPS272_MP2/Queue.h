@@ -1,19 +1,22 @@
 #pragma once
+#include "Customer.h"
 
 class Queue
 {
 	int front;
 	int rear;
-	int arr[20];
+	Customer arr[20];
 	int* ptr;
 public:
 	Queue();
 	bool IsEmpty();
 	bool IsFull();
-	void Enqueue(int);
-	int Dequeue();
+	void Enqueue(Customer);
+	void Dequeue();
 	int Count();
-	int& operator [](int);
-	int& Front();
+	Customer& operator [](int);
+	Customer& FrontCust();
+	int Front();
+	int Rear();
 };
 

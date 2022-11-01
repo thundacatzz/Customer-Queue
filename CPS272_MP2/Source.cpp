@@ -4,49 +4,52 @@
 
 int main()
 {
-	time_t seed;
-	srand(time(&seed));
-
 	Queue queue;
+	Customer nextCustomer;
 		
-	int arrivalTime = (rand() % 4) + 1;
-	int customerServiceTime = (rand() % 4) + 1;
 	int customersServed = 0;
 	int maxCustomers = 0;
+	int longestWait = 0;
+
 	for (int i = 0; i <= 119; i++)
 	{
 		std::cout << i << " minutes elapsed. ";
-		if (arrivalTime != 0)
+		if (nextCustomer.GetArrival() != 0)
 		{
-			arrivalTime -= 1;
+			nextCustomer.Arriving();
 		}
 
-		if (arrivalTime == 0 && !queue.IsFull())
+		if (nextCustomer.GetArrival() == 0 && !queue.IsFull())
 		{
-			queue.Enqueue(customerServiceTime);
+			queue.Enqueue(nextCustomer);
 			std::cout << std::left << "New customer in queue. ";
+			nextCustomer.Reroll();
 			
 			if (queue.Count() > maxCustomers)
 				maxCustomers = queue.Count();
-
-			arrivalTime = (rand() % 4) + 1;
-			customerServiceTime = (rand() % 4) + 1;
 		}
 		
 		if (!queue.IsEmpty())
 		{
-			if (queue.Front() != 0)
+			if (queue.FrontCust().GetService() != 0)
 			{
-				queue.Front() -= 1;
+				queue.FrontCust().BeingServed();
 			}
-			if (queue.Front() == 0)
+			if (queue.FrontCust().GetService() == 0)
 			{
 				queue.Dequeue();
 				std::cout << std::left << "Customer served. ";
 				customersServed++;
 			}
+			for (int j = queue.Front() + 1; j <= queue.Rear(); j++)
+			{
+				queue[j].Waiting();
+				if (queue[j].GetWaitTime() > longestWait)
+					longestWait = queue[j].GetWaitTime();
+			}
 		}	
 		std::cout << std::endl;
 	}
-	std::cout << "Simulation complete." << std::endl << "Customers served : " << customersServed << std::endl << "Longest wait time by one customer : " << std::endl << "Maximum number of customers in queue : " << maxCustomers;
+	std::cout << "Simulation complete." << std::endl << "Customers served : " << customersServed << std::endl << "Longest wait time by one customer : " << longestWait << " minutes" << std::endl;
+	std::cout << "Maximum number of customers in queue : " << maxCustomers;
 }

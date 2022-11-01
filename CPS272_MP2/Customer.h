@@ -3,6 +3,19 @@
 
 class Customer
 {
-	int serviceTime = (rand() % 4) + 1;
+	int customerServiceTime;
+	int arrivalTime;
+	int timeWaiting;
+	bool empty;
+public:
+	Customer();
+	int GetArrival();
+	int GetService();
+	int GetWaitTime();
+	void SetEmpty();
+	void Arriving();
+	void Waiting();
+	void BeingServed();
+	void Reroll();
 };
 

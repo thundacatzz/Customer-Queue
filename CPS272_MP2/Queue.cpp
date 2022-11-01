@@ -7,7 +7,7 @@ Queue::Queue()
 	rear = -1;
 	for (int i = 0; i < 20; i++)
 	{
-		arr[i] = 0;
+		arr[i].SetEmpty();
 	}
 }
 
@@ -27,7 +27,7 @@ bool Queue::IsFull()
 		return false;
 }
 
-void Queue::Enqueue(int serviceTime)
+void Queue::Enqueue(Customer next)
 {
 	if (IsFull())
 	{
@@ -38,35 +38,29 @@ void Queue::Enqueue(int serviceTime)
 	{
 		front = 0;
 		rear = 0;
-		arr[rear] = serviceTime;
+		arr[rear] = next;
 	}
 	else
 		rear = (rear + 1) % 20;
-		arr[rear] = serviceTime;
+		arr[rear] = next;
 }
 
-int Queue::Dequeue()
+void Queue::Dequeue()
 {
-	int x;
 	if (IsEmpty())
 	{
 		std::cout << "Queue is empty. " << std::endl;
-		return 0;
 	}
 	else if (front == rear)
 	{
-		x = arr[front];
-		arr[front] = 0;
+		FrontCust().SetEmpty();
 		rear = -1;
 		front = -1;
-		return x;
 	}
 	else
 	{
-		x = arr[front];
-		arr[front] = 0;
+		FrontCust().SetEmpty();
 		front = (front + 1) % 20;
-		return x;
 	}
 }
 
@@ -75,14 +69,23 @@ int Queue::Count()
 	return (rear - front + 1);
 }
 
-int& Queue::operator [](int index)
+Customer& Queue::operator [](int index)
 {
 	return arr[index];
 }
 
-int& Queue::Front()
+Customer& Queue::FrontCust()
 {
 	return arr[front];
 }
 
+int Queue::Front()
+{
+	return front;
+}
+
+int Queue::Rear()
+{
+	return rear;
+}
 
